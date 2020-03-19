@@ -1,28 +1,62 @@
-# Write a module that will simulate autonomic car.
-# The simulation is event based, an example:
-# car1 = Car()
-# car1.act(event)
-# print(car1.wheel_angle, car1.speed)
-# where event can be anything you want, i.e. :
-# `('obstacle', 10)` where `10` is a duration (time) of the event.
-##The program should:
-# - act on the event
-# - print out current steering wheel angle, and speed
-# - run in infinite loop
-# - until user breaks the loop
 
-#The level of realism in simulation is of your choice, but more sophisticated solutions are better.
-#If you can thing of any other features, you can add them.
-#Make intelligent use of pythons syntactic sugar (overloading, iterators, generators, etc)
-#Most of all: CREATE GOOD, RELIABLE, READABLE CODE.
-#The goal of this task is for you to SHOW YOUR BEST python programming skills.
-#Impress everyone with your skills, show off with your code.
-#
-#Your program must be runnable with command "python task.py".
-#Show some usecases of your library in the code (print some things)
-#
-#When you are done upload this code to github repository. 
-#
-#Delete these comments before commit!
-#Good luck.
+#Possible events: Turn_off , Acceleration, Deceleration, Rotate_right, Rotate_left
     
+class Car():
+    def __init__(self):
+        self.wheel_angle = 0
+        self.speed = 0
+        self.running = True
+
+
+    def act(self, event):
+        print("car acts on event:")
+        print(event)
+
+        if event[0] == "Turn_off":
+            self.stop_the_car()
+
+        if event[0] == "Acceleration":
+            self.speed += int(event[1])
+            if self.speed > 100:
+                self.accident()
+
+        if event[0] == "Deceleration":
+            if self.speed < int(event[1]):
+                self.speed = 0
+            else:
+                self.speed -= int(event[1])
+
+        if event[0] == "Rotate_right":
+            self.wheel_angle += int(event[1])
+
+        if event[0] == "Rotate_left":
+            self.wheel_angle -= int(event[1])
+
+    def stop_the_car(self):
+        self.running = False
+
+    def print_car_info(self):
+        print("Status: Launched, Current Speed: {} , Steering wheel angle: {}\n".format(self.speed,self.wheel_angle))
+
+    def accident(self):
+        self.running = False
+        print("You have been speeding and you crashed")
+
+car1 = Car()
+
+Event = ["",0]
+
+while car1.running:
+    print()
+    car1.print_car_info()
+
+    print("Insert your event name:")
+    Event[0] = input()
+
+    print("Insert value:")
+    Event[1] = input()
+
+    car1.act(Event)
+
+
+
